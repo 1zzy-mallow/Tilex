@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tilex — The Sweetest Language on the Grid</title>
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212; /* deep black */
+    color: #ffd54f; /* warm golden text */
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  nav {
+    position: sticky;
+    top: 0;
+    width: 250px;
+    background: #3e2f00; /* dark honey brown */
+    padding: 1.5em 1em;
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 4px solid #b38600; /* golden border */
+  }
+  nav h2 {
+    margin-top: 0;
+    font-weight: 700;
+    font-size: 1.5em;
+    margin-bottom: 1em;
+    color: #ffda6c; /* bright honey yellow */
+    text-align: center;
+  }
+  nav ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  nav li {
+    margin: 1em 0;
+  }
+  nav a {
+    text-decoration: none;
+    color: #ffda6c; /* bright honey yellow */
+    font-weight: 600;
+    font-size: 1.1em;
+  }
+  nav a:hover {
+    color: #ffea94; /* lighter hover */
+  }
+
+  /* Main content */
+  main {
+    flex-grow: 1;
+    padding: 2em 3em;
+    overflow-y: auto;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 2em;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 3em;
+    color: #ffcc33; /* golden header */
+    text-shadow: 1px 1px 4px #333;
+    letter-spacing: 2px;
+  }
+  header p {
+    font-size: 1.2em;
+    color: #ffdb70;
+    font-weight: 600;
+    margin-top: 0.2em;
+  }
+
+  section {
+    margin-bottom: 3em;
+  }
+
+  /* Updated honey highlight for category titles */
+  section h2 {
+    border-left: 8px solid #b38600;
+    padding-left: 12px;
+    color: #ffda6c;
+    font-weight: 700;
+
+    background-color: rgba(255, 213, 79, 0.2); /* transparent honey highlight */
+    border-radius: 6px;
+    padding: 8px 12px 8px 16px;
+    display: inline-block;
+    margin-bottom: 1em;
+  }
+
+  section pre {
+    background: #2a2a2a; /* dark grey for code blocks */
+    border: 2px solid #b38600;
+    border-radius: 8px;
+    padding: 1em;
+    font-family: monospace;
+    font-size: 1.1em;
+    overflow-x: auto;
+    color: #ffe48d; /* golden code text */
+    white-space: pre-wrap;
+  }
+  section p.definition {
+    font-size: 1em;
+    line-height: 1.3;
+    font-style: italic;
+    color: #ffdb70;
+    margin-top: 0.5em;
+    margin-left: 1em;
+  }
+
+  footer {
+    text-align: center;
+    padding: 1em;
+    background: #3e2f00;
+    color: #ffdb70;
+    font-weight: 600;
+    border-top: 2px solid #b38600;
+  }
+
+  /* Logo */
+  .logo {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin-bottom: 1em;
+  }
+
+  .logo svg {
+    margin-right: 10px;
+  }
+
+  .logo span {
+    font-size: 2.2em;
+    font-weight: 900;
+    color: #ffcc33;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 3px;
+    text-shadow: 1px 1px 3px #664d00;
+  }
+
+  /* Scrollbar styling for sidebar */
+  nav::-webkit-scrollbar {
+    width: 8px;
+  }
+  nav::-webkit-scrollbar-thumb {
+    background-color: #b38600;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <svg width="50" height="50" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Honeycomb shape -->
+      <polygon points="32,4 48,16 48,40 32,52 16,40 16,16" 
+        fill="#ffcc33" stroke="#b38600" stroke-width="2"/>
+      <!-- Smaller hex inside -->
+      <polygon points="32,12 43,20 43,36 32,44 21,36 21,20" 
+        fill="#ffd54f" stroke="#b38600" stroke-width="1"/>
+    </svg>
+    <span>Tilex</span>
+  </div>
+  <h2>Tilex Guide</h2>
+  <ul>
+	<li><a href="#try-tilex">Try Tilex!</a></li>
+    <li><a href="#what-is-tilex">What is Tilex?</a></li>
+    <li><a href="#sample-code">Sample Code</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#control">Control</a></li>
+    <li><a href="#operators">Operators</a></li>
+    <li><a href="#visuals">Visuals</a></li>
+    <li><a href="#vars">Variables</a></li>
+    <li><a href="#jars">Jars</a></li>
+    <li><a href="#honey">Honey (Misc)</a></li>
+    <li><a href="#comments">Comments</a></li>
+  </ul>
+</nav>
+
+<main>
+	<section id="try-tilex">
+  <h2>Try Tilex!</h2>
+  <textarea id="tilex-editor" rows="10" style="width:100%;font-family:monospace;"></textarea>
+  <br>
+  <button onclick="runTilex()">Run</button>
+  <pre id="tilex-output" style="min-height:2em;"></pre>
+</section>
+<script>
+function runTilex() {
+  const code = document.getElementById('tilex-editor').value;
+  // Placeholder: just echoes code for now
+  document.getElementById('tilex-output').textContent = 
+    "You wrote:\n" + code + 
+    "\n\n(Interpreter coming soon!)";
+}
+</script>
+  <header>
+    <h1>🍯 Tilex</h1>
+    <p>The coolest coding language ever.</p>
+  </header>
+
+  <section id="what-is-tilex">
+    <h2>What is Tilex?</h2>
+    <p>Tilex is a powerful programming language created by <strong>Izzy</strong> — a 9-year-old coder! It lets you control tiles, visuals, and more using simple but expressive commands.</p>
+  </section>
+
+  <section id="sample-code">
+    <h2> Sample Code</h2>
+    <pre>
+when starting
+ask (What should I say?) wait
+set [text v] to (answer)
+ask (How many times?) wait
+set [value v] to (answer)
+display text (repeat (text) (value) times)
+
+define {repeat (text) (number) times}
+marco
+set [i v] to ()
+repeat (number)
+set [i v] to (join (i) (text))
+end
+polo (i)
+    
+  </section>
+
+  <section id="events">
+    <h2>Events</h2>
+    <pre>
+when starting
+when (any v) key pressed
+when cursor clicked
+when cursor moved
+when cursor touching tile &gt; ()
+    </pre>
+    <p class="definition">
+      when starting: when the code is executed<br>
+      when (any v) key pressed: runs when the selected key is pressed and all keys on the keyboard can be used<br>
+      when cursor clicked: runs when the user clicks anywhere<br>
+      when cursor moved: runs every time the mouse moves<br>
+      when cursor touching tile &gt; (): runs when the cursor touches a tile greater than the given value
+    </p>
+  </section>
+
+  <section id="control">
+    <h2>Control</h2>
+    <pre>
+if &lt;&gt;...
+//something
+fi
+
+switch ()*
+case ()...
+//something
+esac
+end
+
+while &lt;&gt;...
+//something
+stick
+
+repeat until &lt;&gt;...
+//something
+litnu
+    </pre>
+    <p class="definition">
+      if &lt;&gt;...: runs if condition is true<br>
+      fi: closing of if block<br>
+      switch ()*: monitors the chosen variable<br>
+      case ()...: executes if the switched variable equals the case value<br>
+      esac: closing of case<br>
+      end: closing of switch<br>
+      while &lt;&gt;...: runs while the condition is true<br>
+      stick: closing of while<br>
+      repeat until &lt;&gt;...: repeats until the boolean is false<br>
+      litnu: closing of repeat until<br>
+      * all switch conditions must contain a variable<br>
+      ** all case () conditions must be inside a switch () condition
+    </p>
+  </section>
+
+  <section id="operators">
+    <h2>Operators</h2>
+    <pre>
+1
+0
+&lt;()=()&gt;
+(()+())
+(()-())
+(()*())
+(()/())
+() ? ()
+    </pre>
+    <p class="definition">
+      1: true<br>
+      0: false<br>
+      &lt;()=()&gt;: returns true if both values equal the same<br>
+      (() + ()): returns the two values combined<br>
+      (() - ()): returns the first value minus the second<br>
+      (() * ()): returns the first value multiplied by the second<br>
+      (() / ()): returns the first value divided by the second<br>
+      () ? (): reports a number in between the first and the second
+    </p>
+  </section>
+
+  <section id="visuals">
+    <h2>Visuals</h2>
+    <pre>
++
+-
+br+
+brtl+
+br-
+brtl-
+change x by ()
+change y by ()
+draw hex #(________)
+    </pre>
+    <p class="definition">
+      +: increments value of current tile by 1<br>
+      -: decrements value of current tile by 1<br>
+      br+: changes brightness of self by 10%<br>
+      brtl+: changes brightness of current tile by 10%<br>
+      br-: changes brightness of self by -10%<br>
+      brtl-: changes brightness of current tile by -10%<br>
+      change x by (): changes the x position by the value<br>
+      change y by (): changes the y position by the value<br>
+      draw hex #(________): leaves a trail behind the user colored the hex color inputted with transparency
+    </p>
+  </section>
+
+  <section id="vars">
+    <h2>Variables</h2>
+    <pre>
+[create var]
+value
+current tile
+x
+y
+set value to ()
+change value by ()
+when [value v] = ()
+    </pre>
+    <p class="definition">
+      [create var]: creates a variable<br>
+      value: returns current state<br>
+      current tile: returns value of current tile<br>
+      x: returns x position<br>
+      y: returns y position<br>
+      set value to (): sets the value to<br>
+      change value by (): changes the value by<br>
+      when [value v] = (): runs when value equals
+    </p>
+  </section>
+
+  <section id="jars">
+    <h2>Jars</h2>
+    <pre>
+[create jar]
+
+jar
+&lt;[jar v] contains ()?&gt;
+add () to [jar v]
+delete () of [jar v]
+delete all of [jar v]
+when [jar v] contains ()
+    </pre>
+    <p class="definition">
+      [create jar]: creates a jar<br>
+      jar: contains multiple values<br>
+      &lt;[jar v] contains ()?&gt;: checks if the jar contains a value<br>
+      add () to [jar v]: adds to the chosen jar<br>
+      delete () of [jar v]: deletes of the chosen jar<br>
+      delete all of [jar v]: deletes all of the chosen jar<br>
+      when [jar v] contains (): runs when the chosen jar contains a value
+    </p>
+  </section>
+
+  <section id="honey">
+    <h2>Honey (Miscellaneous)</h2>
+    <pre>
+[create honey]
+define <strong>{honey}</strong>
+honey
+display ()
+display () for () seconds
+wait ()
+clear
+reload
+load site ()
+load site nt()
+...()
+ask () wait
+(answer)
+marco
+polo ()
+polo &lt;&gt;
+    </pre>
+    <p class="definition">
+      [create honey]: make a honey with booleans, reporters and labels plus also run without screen refresh<br>
+      define <strong>{honey}</strong>: runs when the honey is run<br>
+      honey: executes the define<br>
+      display (): displays text until stop pressed<br>
+      display () for () seconds: displays text for seconds<br>
+      wait (): waits for seconds<br>
+      clear: clears all<br>
+      reload: reloads the page<br>
+      load site (): loads the inputted site in current page<br>
+      load site nt(): loads the inputted site in a new tab<br>
+      ...(): random string of text that is long<br>
+      ask () wait: asks and waits until an answer is confirmed<br>
+      (answer): reports the given answer<br>
+      marco: start of a return<br>
+      polo (): end of marco and returns a reporter value<br>
+      polo &lt;&gt;: end of marco and returns a boolean value
+    </p>
+  </section>
+
+  <section id="comments">
+    <h2>Comments</h2>
+    <pre>
+// (comment)
+// &lt;comment&gt;
+// comment
+// comment
+add
+    </pre>
+    <p class="definition">
+      // (comment): sticks right beside a reporter<br>
+      // &lt;comment&gt;: sticks right beside a boolean<br>
+      // comment: sticks right beside a normal code<br>
+      // comment: contains code (container comment)<br>
+      add: end of container comment
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  Made with 💛 by Izzy | 2025
+</footer>
+
+</body>
+</html>
+
